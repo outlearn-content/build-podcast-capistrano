@@ -1,0 +1,261 @@
+<p><a href="http://capistranorb.com/">Capistrano</a> is remote multi-server automation tool that is often used for deployment. In this episode, we will first learn how to execute command line tasks in several servers, then we will deploy a <a href="https://github.com/">github</a> repo on a newly fired up <a href="http://aws.amazon.com/ec2/">EC2</a> instance.</p>
+
+<p><strong>Download video</strong>: <a href="http://video.build-podcast.com/035-capistrano.mp4" download="build-podcast-035-capistrano.mp4">mp4</a></p>
+
+<p><strong>Sample code</strong>: <a href="https://github.com/sayanee/build-podcast/tree/master/035-capistrano">Github</a></p>
+
+<p><strong>Similar episodes</strong>: <a href="/git">004 GIT</a>, <a href="/bash/">019 Bash</a>, <a href="/ssh/">022 SSH</a>,  <a href="/github">015 Github</a>, <a href="/aws">033 AWS</a>,</p>
+
+<p><strong>Version</strong>: 2.14.2 (For current Version 3, start with the <a href="https://github.com/capistrano/capistrano/blob/master/README.md">Readme</a>)</p>
+
+<h2>Background on Capistrano</h2>
+
+<ol>
+<li><a href="https://github.com/capistrano/capistrano/wiki">Wiki</a>, <a href="https://github.com/capistrano/capistrano">Github</a></li>
+<li><a href="https://github.com/capistrano/capistrano/wiki/Capistrano-Tasks">Capistrano tasks</a></li>
+</ol>
+
+<h2>Things to learn with Capistrano</h2>
+
+<h3>1. install Capistrano</h3>
+
+<ol>
+<li><p>install <a href="http://rubygems.org/">rubygem</a></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">gem -v
+2.0.0
+</code></pre></div></li>
+<li><p>install <a href="http://rubygems.org/gems/capistrano">capistrano gem</a></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">gem install capistrano
+gem list capistrano
+
+*** LOCAL GEMS ***
+capistrano (2.14.2)
+</code></pre></div></li>
+<li><p>for all help commands run <code>cap -h</code></p></li>
+</ol>
+
+<h3>2. simple Capfile</h3>
+
+<ol>
+<li>We will SSH into our local machine - i know it&#39;s very meta, but it&#39;s simple (rather than setting up another remote machine or EC2, etc)!</li>
+<li>Go to <code>System Preferences &gt; Sharing &gt; Check Remote Login</code> and take note of the SSH command e.g. <code>ssh <a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="3f4c5e465e515a5a7f0e0f110f110e110d0d">[email&#160;protected]</a><script cf-hash='f9e31' type="text/javascript">
+/* <![CDATA[ */!function(){try{var t="currentScript"in document?document.currentScript:function(){for(var t=document.getElementsByTagName("script"),e=t.length;e--;)if(t[e].getAttribute("cf-hash"))return t[e]}();if(t&&t.previousSibling){var e,r,n,i,c=t.previousSibling,a=c.getAttribute("data-cfemail");if(a){for(e="",r=parseInt(a.substr(0,2),16),n=2;a.length-n;n+=2)i=parseInt(a.substr(n,2),16)^r,e+=String.fromCharCode(i);e=document.createTextNode(e),c.parentNode.replaceChild(e,c)}}}catch(u){}}();/* ]]> */</script></code> and the corresponding IP address <code>10.0.1.22</code></li>
+<li>Hosts can ofcourse be <code>www.example.com</code> or in this case our own local machine <code>10.0.1.22</code></li>
+<li><p>Create a file named <code>Capfile</code> with the following contents and run in the command line <code>cap list_files</code>:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">task :list_files, :hosts =&gt; &quot;10.0.1.22&quot; do
+  run &quot;ls&quot;
+end
+</code></pre></div></li>
+<li><p>Let&#39;s add in a second task and run <code>cap whois_user</code> or <code>cap list_files</code>:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">task :whois_user, :hosts =&gt; &quot;10.0.1.22&quot; do
+  run &quot;echo $USER&quot;
+end
+
+task :list_files, :hosts =&gt; &quot;10.0.1.22&quot; do
+  run &quot;ls&quot;
+end
+</code></pre></div></li>
+<li><p>Specifying the host over and over again is not efficient</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">role :libs, &quot;10.0.1.22&quot;
+
+task :whois_user do
+  run &quot;echo $USER&quot;
+end
+
+task :list_files do
+  run &quot;ls&quot;
+end
+</code></pre></div></li>
+<li><p>We can also specify, multiple-servers now. <code>cap whois_user</code> will be execute in both the servers!</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">role :libs, &quot;10.0.1.22&quot;, &quot;www.example.com&quot;
+
+task :whois_user do
+  run &quot;echo $USER&quot;
+end
+
+task :list_files do
+  run &quot;ls&quot;
+end
+</code></pre></div></li>
+<li><p>We can also specify different groups of hosts e.g. <code>analytics</code> and <code>information</code>:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">role :info, &quot;10.0.1.22&quot;, &quot;10.0.1.20&quot;
+role :analytics, &quot;10.0.1.22&quot;
+
+task :whois_user, :roles =&gt; :info do
+  run &quot;echo $USER&quot;
+end
+
+task :list_files, :roles =&gt; :info do
+  run &quot;ls&quot;
+end
+
+task :show_free_space, :roles =&gt; :analytics do
+  run &quot;df -h /&quot;
+end
+</code></pre></div></li>
+<li><p><code>cap -T</code> command will give all the task list with descriptions</p></li>
+<li><p>Include Task list with descriptions and then run <code>cap -T</code>:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">role :info, &quot;10.0.1.22&quot;, &quot;10.0.1.20&quot;
+role :analytics, &quot;10.0.1.22&quot;
+
+desc &quot;The Current Username&quot;
+task :whois_user, :roles =&gt; :info do
+  run &quot;echo $USER&quot;
+end
+
+desc &quot;List Files in the home Directory&quot;
+task :list_files, :roles =&gt; :info do
+  run &quot;ls&quot;
+end
+
+desc &quot;Show Free Spaces&quot;
+task :show_free_space, :roles =&gt; :analytics do
+  run &quot;df -h /&quot;
+end
+</code></pre></div></li>
+<li><p>Simultaneously run commands in all servers:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">cap invoke COMMAND=&quot;ls&quot;
+</code></pre></div></li>
+</ol>
+
+<h3>2. deploy a simple <code>html</code> file with Github and AWS EC2</h3>
+
+<h4>1. Open a new Github Repo</h4>
+
+<ol>
+<li>Open a new github Repo</li>
+</ol>
+
+<h4>2. Prepare a local project with git</h4>
+
+<ol>
+<li>Go to an empty folder for the project</li>
+<li>Create a simple <code>index.html</code></li>
+<li><p>Initiate a git repository and push to github</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">git init
+git add README.md
+git commit -m &quot;first commit&quot;
+git remote add origin git@[username]/[repo-name].git
+git push -u origin master
+</code></pre></div></li>
+</ol>
+
+<h4>3. Prepare a capistrano task</h4>
+
+<ol>
+<li>Go to the project folder and one level up in the command line (or anywhere you wish) to create the Capistrano task</li>
+<li><p>run in the command line <code>capify .</code> and this will create:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">.
+|-- Capfile
+`-- config
+    `-- deploy.rb
+</code></pre></div></li>
+<li><p>Include the <a href="https://help.github.com/articles/deploying-with-capistrano">capistrano config</a> in file <code>deploy/config.rb</code></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">set :application, &quot;cap-github-ec2&quot;
+set :deploy_to, &quot;/var/www/html&quot;
+
+set :scm, :git
+set :repository, &quot;<a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="a1c6c8d5e1c6c8d5c9d4c38fc2cecc">[email&#160;protected]</a><script cf-hash='f9e31' type="text/javascript">
+/* <![CDATA[ */!function(){try{var t="currentScript"in document?document.currentScript:function(){for(var t=document.getElementsByTagName("script"),e=t.length;e--;)if(t[e].getAttribute("cf-hash"))return t[e]}();if(t&&t.previousSibling){var e,r,n,i,c=t.previousSibling,a=c.getAttribute("data-cfemail");if(a){for(e="",r=parseInt(a.substr(0,2),16),n=2;a.length-n;n+=2)i=parseInt(a.substr(n,2),16)^r,e+=String.fromCharCode(i);e=document.createTextNode(e),c.parentNode.replaceChild(e,c)}}}catch(u){}}();/* ]]> */</script>:chinee/hello-cap.git&quot;
+set :scm_username, &quot;sayanee&quot;
+
+set :location, &quot;ec2-54-234-17-185.compute-1.amazonaws.com&quot;
+role :app, location
+role :web, location
+role :db,  location, :primary =&gt; true
+set :user, &quot;ec2-user&quot;
+ssh_options[:keys] = [&quot;/Users/sayanee/.ssh/ec2.pem&quot;]
+default_run_options[:pty] = true
+
+set :branch, &#39;master&#39;
+set :scm_verbose, true
+</code></pre></div></li>
+</ol>
+
+<h4>4. Create an EC2 instance</h4>
+
+<ol>
+<li><p>Create a simple <a href="https://github.com/sayanee/Build-Podcast/tree/master/033-aws#1-elastic-cloud-compute-ec2-for-a-simple-indexhtml">ec2 instance</a></p></li>
+<li><p>SSH login into EC2 instance with the <code>*.pem</code> file which has the correct permissions</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">chmod 600 mykey.pem
+ssh -i mykey.pem ec2-user@[public-dns]
+</code></pre></div></li>
+<li><p>Install Git</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo yum install git
+</code></pre></div></li>
+<li><p>Install Apache Server</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo yum install httpd
+</code></pre></div></li>
+<li><p>Ensure that the default folder exisrs</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">cd ../../var/www/html/
+</code></pre></div></li>
+<li><p>Start the Apache server and check its status</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo service httpd start
+sudo service httpd status
+</code></pre></div></li>
+<li><p>visit the <em>ec2 public dns</em> with the address<a href="#">http://ec2-xx-xxx-xx-xxx.compute-1.amazonaws.com</a> and it should show a default Amazon Linux AMI Test Page</p></li>
+<li><p>Create an SSH key pair and upload to github</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">cd ~/.ssh
+ssh-keygen -t rsa -f [name] -C &quot;[email]&quot;
+</code></pre></div></li>
+<li><p>Create the SSH Config file</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">touch ~/.ssh/config
+</code></pre></div></li>
+<li><p>Edit the <code>~/.ssh/config</code> using an editor such as <code>sudo nano ~/.ssh/config</code> file with the following contents:</p></li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">   Hostname github.com
+   IdentityFile ~/.ssh/[name]
+</code></pre></div>
+<ol>
+<li><p>Change permsissions for the config file</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">chmod 600 ~/.ssh/config
+</code></pre></div></li>
+<li><p>copy the content of the public key:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">cat ~/.ssh/name.pub
+</code></pre></div></li>
+<li><p>Go back to the Github repo page and add SSH keys to <code>Github Repo &gt; Setting &gt; Deploy Keys</code> and paste in the contents of <code>~/.ssh/name.pub</code></p></li>
+<li><p>Test whether SSH into Github works</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">ssh -T <a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="baddd3cefaddd3ced2cfd894d9d5d7">[email&#160;protected]</a><script cf-hash='f9e31' type="text/javascript">
+/* <![CDATA[ */!function(){try{var t="currentScript"in document?document.currentScript:function(){for(var t=document.getElementsByTagName("script"),e=t.length;e--;)if(t[e].getAttribute("cf-hash"))return t[e]}();if(t&&t.previousSibling){var e,r,n,i,c=t.previousSibling,a=c.getAttribute("data-cfemail");if(a){for(e="",r=parseInt(a.substr(0,2),16),n=2;a.length-n;n+=2)i=parseInt(a.substr(n,2),16)^r,e+=String.fromCharCode(i);e=document.createTextNode(e),c.parentNode.replaceChild(e,c)}}}catch(u){}}();/* ]]> */</script>
+</code></pre></div></li>
+<li><p>The project will be deployed to <code>/var/www/html</code> so ensure the permission is set to the current user</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">cd /var/www/html
+sudo chown -R ec2-user:ec2-user .
+</code></pre></div></li>
+<li><p>By default capistrano will release the latest project into the folder <code>/var/www/[project-name]/current/public</code>, so we will need to tell the Apache server to point to it. Open the config file</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo nano /etc/httpd/conf/httpd.conf
+</code></pre></div></li>
+<li><p>Edit the lines to point to it</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">…
+DocumentRoot &quot;/var/www/html/current&quot;
+…
+&lt;Directory &quot;/var/www/html/current/public&quot;&gt;
+</code></pre></div></li>
+<li><p>Stop and restart the Apache server</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo service httpd stop
+sudo service httpd start
+</code></pre></div></li>
+</ol>
+
+<h4>5. Deploy using Capistrano and Github</h4>
+
+<ol>
+<li><p>Come back to the Local machine in the folder where the capistrano task is defined. Check everything is working!</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">cap deploy:setup
+</code></pre></div></li>
+<li><p>Deploy from Github to EC2</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">cap deploy
+</code></pre></div></li>
+<li><p>View the public DNS in the browser and it should show your simple <code>index.html</code> file!</p></li>
+</ol>
+
+<h2>More Resources on Capistrano</h2>
+
+<ol>
+<li><a href="http://alexpearce.me/2012/07/deploying-to-a-vps-with-capistrano/">Deploying to a VPS with Capistrano</a></li>
+<li><a href="https://github.com/leehambley/capistrano-handbook/blob/master/index.markdown">Capistrano Handbook</a></li>
+<li><a href="http://blog.grio.com/2012/07/how-to-deploy-your-web-app-to-amazon-ec2-using-capistrano.html">How to deploy your web app using capistrano and ec2</a></li>
+<li><a href="https://github.com/capistrano/capistrano/wiki/Capistrano-Tasks">Capistrano Tasks</a>
+##Build Link of this Episode</li>
+</ol>
+
