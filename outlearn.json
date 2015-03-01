@@ -12,16 +12,33 @@
     "email" : "sayanee@gmail.com",
     "url" : "http://sayan.ee/"
   },
-  "parts" : [
+  "sections" : [
     {
-      "type" : "asset",
-      "contentType" : "video/vimeo",
-      "location" : "assets/Build Podcast 035 Capistrano-HD.mp4"
-    }
+      "title": "Overview",
+      "file": "sections/overview.md"
+    },
     {
-      "type" : "asset",
-      "contentType" : "text/markdown",
-      "location" : "assets/body.md"
+      "title": "1. Install Capistrano",
+      "file": "sections/installing_capistrano.md"
+    },
+    {
+      "title": "2. Simple Capfile",
+      "file": "sections/simple_capfile.md"
+    },
+    {
+      "title": "3. Deploy a simple HTML file with Github and AWS EC2",
+      "file": "sections/deploying.md"
+    },
+    {
+      "title": "More Resources",
+      "file": "sections/more_resources.md"
+    },
+  ],
+  "assets" : [
+    {
+      "ref" : "screencast-video",
+      "contentType" : "video/mp4",
+      "location" : "assets/build-podcast-capistrano.mp4"
     }
   ]
 }

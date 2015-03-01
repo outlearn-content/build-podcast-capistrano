@@ -1,13 +1,23 @@
 <!--
 name: capistrano-post
-version : "0.0.1"
+version : "0.0.2"
 title : "Capistrano"
 description: "Capistrano is remote multi-server automation tool that is often used for deployment. In this episode, we will first learn how to execute command line tasks in several servers, then we will deploy a Github repo on a newly fired up EC2 instance."
 homepage : "http://build-podcast.com/capistrano/"
 author : "Sayanee"
-license : "CC Attribution Share Alike"",
+license : "CC Attribution Share Alike"
 contact : "sayanee@gmail.com"
 -->
+
+<!-- @section, title: 'Overview' -->
+
+You can watch the video, or read the transcript, but we recommend that you following along below while the video plays.
+
+<!-- @asset, type: 'video/vimeo', location: 'https://vimeo.com/61887298' -->
+
+<!-- @no-outlearn -->
+<iframe src="http://player.vimeo.com/video/61887298" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href="https://vimeo.com/61887298">Build Podcast 035 Capistrano</a> from <a href="https://vimeo.com/sayanee">Sayanee</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+<!-- @yes-outlearn -->
 
 [Capistrano](http://capistranorb.com/) is remote multi-server automation tool
 that is often used for deployment. In this episode, we will first learn how to
@@ -23,13 +33,16 @@ execute command line tasks in several servers, then we will deploy a
 
 **Version**: 2.14.2 (For current Version 3, start with the [Readme](https://github.com/capistrano/capistrano/blob/master/README.md))
 
-
 ## Background on Capistrano
 
   1. [Wiki](https://github.com/capistrano/capistrano/wiki), [Github](https://github.com/capistrano/capistrano)
   2. [Capistrano tasks](https://github.com/capistrano/capistrano/wiki/Capistrano-Tasks)
 
+<!-- @asset, type: 'text/markdown, title: 'Things to learn with Capistrano' -->
+
 ## Things to learn with Capistrano
+
+<!-- @section -->
 
 ### 1\. install Capistrano
 
@@ -49,6 +62,8 @@ execute command line tasks in several servers, then we will deploy a
 
 
   3. for all help commands run `cap -h`
+
+<!-- @section -->
 
 ### 2\. simple Capfile
 
@@ -144,6 +159,8 @@ execute command line tasks in several servers, then we will deploy a
 
         cap invoke COMMAND="ls"
 
+
+<!-- @section -->
 
 ### 2\. deploy a simple `html` file with Github and AWS EC2
 
@@ -302,6 +319,8 @@ execute command line tasks in several servers, then we will deploy a
 
 
   3. View the public DNS in the browser and it should show your simple `index.html` file!
+
+<!-- @section -->
 
 ## More Resources on Capistrano
 
