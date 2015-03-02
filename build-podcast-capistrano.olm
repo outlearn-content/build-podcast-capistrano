@@ -162,7 +162,7 @@ execute command line tasks in several servers, then we will deploy a
 
 <!-- @section -->
 
-### 2\. deploy a simple `html` file with Github and AWS EC2
+### 3\. deploy a simple `html` file with Github and AWS EC2
 
 #### 1\. Open a new Github Repo
 

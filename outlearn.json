@@ -15,23 +15,23 @@
   "sections" : [
     {
       "title": "Overview",
-      "file": "sections/overview.md"
+      "location": "sections/overview.md"
     },
     {
       "title": "1. Install Capistrano",
-      "file": "sections/installing_capistrano.md"
+      "location": "sections/installing_capistrano.md"
     },
     {
       "title": "2. Simple Capfile",
-      "file": "sections/simple_capfile.md"
+      "location": "sections/simple_capfile.md"
     },
     {
       "title": "3. Deploy a simple HTML file with Github and AWS EC2",
-      "file": "sections/deploying.md"
+      "location": "sections/deploying.md"
     },
     {
       "title": "More Resources",
-      "file": "sections/more_resources.md"
+      "location": "sections/more_resources.md"
     },
   ],
   "assets" : [
