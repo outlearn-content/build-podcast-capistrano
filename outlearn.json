@@ -4,7 +4,6 @@
   "version" : "0.1.2",
   "title" : "Capistrano",
   "description": "Capistrano is remote multi-server automation tool that is often used for deployment. In this episode, we will first learn how to execute command line tasks in several servers, then we will deploy a Github repo on a newly fired up EC2 instance.",
-  "type" : "module",
   "homepage" : "http://build-podcast.com/capistrano/",
   "authors" : {
     "name": "Sayanee"
@@ -18,7 +17,7 @@
     },
     {
       "title": "1. Install Capistrano",
-      "location": "sections/installing_capistrano.md"
+      "location": "sections/install_capistrano.md"
     },
     {
       "title": "2. Simple Capfile",
@@ -27,11 +26,7 @@
     {
       "title": "3. Deploy a simple HTML file with Github and AWS EC2",
       "location": "sections/deploying.md"
-    },
-    {
-      "title": "More Resources",
-      "location": "sections/more_resources.md"
-    },
+    }
   ],
   "assets" : [
     {

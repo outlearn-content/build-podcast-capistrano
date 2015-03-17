@@ -1,6 +1,6 @@
 You can watch the video, or read the transcript, but we recommend that you following along below while the video plays.
 
-<!-- @asset, "contentType" : "outlearn/video-youtube", "url": "https://www.youtube.com/watch?v=U4P0CH9v0rs" -->
+<!-- @asset, "contentType" : "outlearn/video", "provider": "youtube", "url": "https://www.youtube.com/watch?v=U4P0CH9v0rs" -->
 
 [Capistrano](http://capistranorb.com/) is remote multi-server automation tool
 that is often used for deployment. In this episode, we will first learn how to
