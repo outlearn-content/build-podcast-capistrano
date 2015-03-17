@@ -1,17 +1,16 @@
 {
-  "olpVersion" : "0.1",
+  "olpVersion" : "0.2",
   "name" : "capistrano-post",
-  "version" : "0.0.1",
+  "version" : "0.1.2",
   "title" : "Capistrano",
   "description": "Capistrano is remote multi-server automation tool that is often used for deployment. In this episode, we will first learn how to execute command line tasks in several servers, then we will deploy a Github repo on a newly fired up EC2 instance.",
   "type" : "module",
   "homepage" : "http://build-podcast.com/capistrano/",
-  "authors" : "Sayanee",
-  "license" : "CC Attribution Share Alike",
-  "contact" : {
-    "email" : "sayanee@gmail.com",
-    "url" : "http://sayan.ee/"
+  "authors" : {
+    "name": "Sayanee"
   },
+  "license" : "CC Attribution Share Alike",
+  "contact" : "sayanee@gmail.com",
   "sections" : [
     {
       "title": "Overview",
@@ -36,7 +35,7 @@
   ],
   "assets" : [
     {
-      "ref" : "screencast-video",
+      "name" : "screencast-video",
       "contentType" : "video/mp4",
       "location" : "assets/build-podcast-capistrano.mp4"
     }
