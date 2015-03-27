@@ -13,7 +13,7 @@ contact : "sayanee@gmail.com"
 
 You can watch the video, or read the transcript, but we recommend that you following along below while the video plays.
 
-<!-- @asset, "type": "video/vimeo", location: "https://vimeo.com/61887298" -->
+<!-- @asset, "contentType" : "video/vimeo", "provider" : "vimeo", "location" : "https://vimeo.com/61887298" -->
 
 <!-- @no-outlearn -->
 <iframe src="http://player.vimeo.com/video/61887298" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href="https://vimeo.com/61887298">Build Podcast 035 Capistrano</a> from <a href="https://vimeo.com/sayanee">Sayanee</a> on <a href="https://vimeo.com">Vimeo</a>.</p>

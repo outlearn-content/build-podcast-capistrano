@@ -17,7 +17,6 @@
     },
     {
       "title": "1. Install Capistrano",
-      "location": "sections/install_capistrano.md"
     },
     {
       "title": "2. Simple Capfile",
@@ -30,7 +29,6 @@
   ],
   "assets" : [
     {
-      "name" : "screencast-video",
       "contentType" : "video/mp4",
       "location" : "assets/build-podcast-capistrano.mp4"
     }
